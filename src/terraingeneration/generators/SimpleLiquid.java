@@ -21,33 +21,34 @@ public class SimpleLiquid extends Generator{
 	public void applyToWorld(World w) {
 		for(int y=(int) (w.getHeight()*startDepth); y<w.getHeight()*endDepth; y+= resolution){
 			for(int x=0; x<w.getWidth()-1; x+=resolution){
-				int px=x;
-				int py=y;
-				
-				while(py<w.getHeight()-1 && w.getTerrainAt(px,py)!=World.AIR){
-					py++;
-				}
-				int trials = 0;
-				while(trials<30 && px>0 && py<w.getHeight()-1 && px< w.getWidth()-2 ){//k
-					trials++;
-					if(w.getTerrainAt(px,py+1)==World.AIR){
+				for(int v=0; v<3; v++){
+					int px=x;
+					int py=y;
+					
+					while(py<w.getHeight()-1 && w.getTerrainAt(px,py)!=World.AIR){
 						py++;
-						trials=0;
 					}
-					else if(w.getTerrainAt(px+1,py)==World.AIR){
-						px++;
+					int trials = 0;
+					while(trials<30 && px>0 && py<w.getHeight()-1 && px< w.getWidth()-2 ){//k
+						trials++;
+						if(w.getTerrainAt(px,py+1)==World.AIR){
+							py++;
+							trials=0;
+						}
+						else if(w.getTerrainAt(px+1,py)==World.AIR){
+							px++;
+						}
+						else if(w.getTerrainAt(px-1,py)==World.AIR){
+							px--;
+						}
+						else{
+							break;
+						}
 					}
-					else if(w.getTerrainAt(px-1,py)==World.AIR){
-						px--;
-					}
-					else{
-						break;
+					if (px>0 && py<w.getHeight()-1 && px< w.getWidth()-2 ){
+						depositLiquid(w,px,py);
 					}
 				}
-				if (px>0 && py<w.getHeight()-1 && px< w.getWidth()-2 ){
-					depositLiquid(w,px,py);
-				}
-				
 			}
 		}
 	}
@@ -71,11 +72,13 @@ public class SimpleLiquid extends Generator{
 	private void fillLayer(World w, int px, int py) {
 		int a=1, b=1;
 		w.setTerrainAt(px, py, World.WATER);
-		while(w.getTerrainAt(px-a,py)==World.AIR){
+		while(px-a>=0 && w.getTerrainAt(px-a,py)==World.AIR){
 			w.setTerrainAt(px-a, py, World.WATER);
+			a++;
 		}
-		while(w.getTerrainAt(px+b,py)==World.AIR){
+		while(px+b<w.getWidth()-1 && w.getTerrainAt(px+b,py)==World.AIR){
 			w.setTerrainAt(px+b, py, World.WATER);
+			b++;
 		}
 	}
 	
@@ -88,10 +91,10 @@ public class SimpleLiquid extends Generator{
 				return-1;
 			}
 		}
-		while(px+a>=w.getWidth() && w.getTerrainAt(px+b,py)==World.AIR){
+		while(px+b<w.getWidth()-1 && w.getTerrainAt(px+b,py)==World.AIR){
 			value++;
 			b+=1;
-			if (w.getTerrainAt(px-a,py+1)==World.AIR){
+			if (w.getTerrainAt(px+b,py+1)==World.AIR){
 				return-1;
 			}
 		}
