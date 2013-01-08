@@ -34,9 +34,6 @@ public class Surface extends Generator{
 						w.setTerrainAt(x,y,World.STONE);
 					}
 				}
-				else if(y==surfLevel && w.getTerrainAt(x,y)!=World.AIR){
-					w.setTerrainAt(x, y, World.GRASS);
-				}
 				else{
 					w.setTerrainAt(x,y,World.AIR);
 				}

@@ -16,7 +16,8 @@ public class WorldViewer {
 		new Color(50,190,60),
 		new Color(100,100,100),
 		new Color(150,65,15),
-		new Color(255,0,0)
+		new Color(255,0,0),
+		new Color(30,30,255)
 	};
 	
 	public static BufferedImage drawTerrain(World g) {

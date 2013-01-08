@@ -7,7 +7,7 @@ import terraingeneration.generators.*;
 
 public class World {
 	
-	public static final int AIR = 0, DIRT = 1, GRASS=2, STONE=3, COPPER=4, IRON=5;
+	public static final int AIR = 0, DIRT = 1, GRASS=2, STONE=3, COPPER=4, IRON=5, WATER=6;
 	
 	int seedCalls = 0;
 	
@@ -15,7 +15,7 @@ public class World {
 	private Random seed;
 	
 	Generator[] generators = new Generator[]{
-			new CaveSystem(0.93,30,5,0.1),
+			new CaveSystem(0.93,30,5,0.1),//shitty, but it provides seed areas for the air orepockets
 			
 			new OrePocket(World.AIR ,0.008, 0.00, 0.16, 20),
 			new OrePocket(World.AIR ,0.008, 0.14, 0.41, 25),
@@ -28,7 +28,9 @@ public class World {
 			new OrePocket(World.STONE, 0.008, 0.00, 0.56, 20),
 			new OrePocket(World.DIRT,  0.008, 0.39, 0.80, 10),
 			
-			new CleanScraps(World.AIR)
+			new CleanScraps(World.AIR),
+			//new SimpleErosion(100) // this is shit. Makes the map way worse.
+			new SimpleLiquid(World.WATER, 0.1, 1.8, 30, 30)
 	};
 	
 	public World(int width, int height, int seed){
