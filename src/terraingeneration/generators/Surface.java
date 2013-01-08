@@ -20,7 +20,6 @@ public class Surface extends Generator{
 		
 		for(int i=1; i<w.getWidth()/10+1; i++){
 			surfacepoints[i]=surfacepoints[i-1]+w.getSeed().nextInt(drunkwalk)-w.getSeed().nextInt(drunkwalk);
-			System.out.print(surfacepoints[i]+" ");
 		}
 		
 		for(int x=0; x<w.getTerrain().length; x++){

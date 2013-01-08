@@ -17,7 +17,6 @@ public class OrePocket extends Generator{
 	
 	public void applyToWorld(World w){
 		int range = (int) ((upperBound-lowerBound)*w.getHeight());
-		System.out.println(range);
 		for(int x=0; x<w.getWidth(); x++){
 			for(int y=0; y<w.getHeight(); y++){
 				if(y<upperBound*w.getHeight() && y>lowerBound*w.getHeight()){

@@ -14,7 +14,7 @@ public class Server {
 	
 	
 	public static void main(String[] args){
-		World g = new World (1600,800,1337);
+		World g = new World (800,600,1337);
 		
 		JFrame frame = new JFrame("Generated Terrain");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

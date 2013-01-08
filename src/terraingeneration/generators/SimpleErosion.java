@@ -37,7 +37,6 @@ public class SimpleErosion extends Generator{
 				//trials
 				if(y>oldy){
 					trials=0;
-					System.out.println(x+"  "+y);
 				}
 			}
 			dumpDirt(w);

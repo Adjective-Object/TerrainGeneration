@@ -49,7 +49,6 @@ class Cave{
 	
 	public static void populateCave(World w, CaveNode node){
 		for(int i=0; i<maxbranches; i++){
-			System.out.println("width of "+node.width);
 			if(node.width>3 || w.getSeed().nextFloat()<=0.1){
 				int si = node.width;
 				if(w.getSeed().nextFloat()<=0.75){
@@ -74,7 +73,6 @@ class Cave{
 		for(int i=0; i<node.getChildren().size(); i++){
 			CaveNode subnode = node.getChildren().get(i);
 			float heightline=1;//OPTIMIZATION
-			System.out.println(heightline+" "+node.getChildren().get(i)+" "+node);
 			
 			//establish direction to iterate
 			int xd=1, yd=1;
