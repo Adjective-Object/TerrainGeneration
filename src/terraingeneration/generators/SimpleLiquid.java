@@ -54,7 +54,6 @@ public class SimpleLiquid extends Generator{
 	}
 
 	private void depositLiquid(World w, int px, int py) {
-		System.out.println("dump liquid "+w.getTerrainAt(px,py));
 		int sumValue = 0;
 		while(sumValue<this.volume && w.getTerrainAt(px,py)==World.AIR){
 			int lv = getLayerValue(w,px,py);
@@ -71,13 +70,13 @@ public class SimpleLiquid extends Generator{
 
 	private void fillLayer(World w, int px, int py) {
 		int a=1, b=1;
-		w.setTerrainAt(px, py, World.WATER);
+		w.setTerrainAt(px, py, this.liquidID);
 		while(px-a>=0 && w.getTerrainAt(px-a,py)==World.AIR){
-			w.setTerrainAt(px-a, py, World.WATER);
+			w.setTerrainAt(px-a, py, this.liquidID);
 			a++;
 		}
 		while(px+b<w.getWidth()-1 && w.getTerrainAt(px+b,py)==World.AIR){
-			w.setTerrainAt(px+b, py, World.WATER);
+			w.setTerrainAt(px+b, py, this.liquidID);
 			b++;
 		}
 	}

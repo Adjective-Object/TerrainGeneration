@@ -7,7 +7,7 @@ import terraingeneration.generators.*;
 
 public class World {
 	
-	public static final int AIR = 0, DIRT = 1, GRASS=2, STONE=3, COPPER=4, IRON=5, WATER=6;
+	public static final int AIR = 0, DIRT = 1, GRASS=2, STONE=3, COPPER=4, IRON=5, WATER=6, LAVA=7;
 	
 	int seedCalls = 0;
 	
@@ -30,7 +30,8 @@ public class World {
 			
 			new CleanScraps(World.AIR),
 			//new SimpleErosion(100) // this is shit. Makes the map way worse.
-			new SimpleLiquid(World.WATER, 0.1, 1.8, 30, 30)
+			new SimpleLiquid(World.LAVA, 0.65, 1.0, 10, 50),
+			new SimpleLiquid(World.WATER, 0.1, 1.0, 30, 30)
 	};
 	
 	public World(int width, int height, int seed){

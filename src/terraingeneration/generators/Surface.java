@@ -6,7 +6,7 @@ public class Surface extends Generator{
 	
 	static final int stoneTransition = 10;
 	static final int drunkwalk = 10;
-	static final float dirtLayer = 0.4F;
+	static final float dirtLayer = 0.3F;
 	
 	
 	public Surface(){}
