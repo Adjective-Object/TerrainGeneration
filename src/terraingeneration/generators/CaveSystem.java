@@ -7,23 +7,24 @@ import terraingeneration.World;
 
 public class CaveSystem extends Generator{
 
-	double rarity, seedDepth;
+	double rarity, startDepth, endDepth;
 	int resolution;
 	int jaggedness, size;
 	
-	public CaveSystem(double rarity, int resolution, int size, double seedDepth){
+	public CaveSystem(double rarity, int resolution, int size, double startDepth, double endDepth){
 		this.rarity=rarity;
 		this.resolution=resolution;
-		this.seedDepth=seedDepth;
 		this.jaggedness=1;
 		this.size = size;
+		this.startDepth=startDepth;
+		this.endDepth=endDepth;
 	}
 	
 	@Override
 	public void applyToWorld(World w) {
 
 		for(int x=0; x<w.getWidth(); x+=resolution){
-			for(int y=0; y<w.getHeight(); y+=resolution){
+			for(int y=(int) (w.getHeight()*startDepth); y<w.getHeight()*endDepth; y+=resolution){
 				Cave c = new Cave(w, x, y, size);//10 = width of cave to start
 				
 				c.populateCave(w);

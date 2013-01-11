@@ -23,18 +23,19 @@ public class World {
 	private Random seed;
 	
 	static final Generator[] generators = new Generator[]{
-			new CaveSystem(0.93,30,5,0.1),//shitty, but it provides seed areas for the air orepockets
-			
-			new OrePocket(World.AIR ,0.008, 0.00, 0.16, 20),
-			new OrePocket(World.AIR ,0.008, 0.14, 0.41, 25),
+			//shitty, but it provides seed areas for the air orepockets
+			new CaveSystem(0.93,30,5,0.3,0.9),
+
+			new OrePocket(World.AIR ,0.008, 0.3, 0.41, 25),
 			new OrePocket(World.AIR ,0.008, 0.39, 0.61, 30),
-			new OrePocket(World.AIR ,0.008, 0.59, 0.90, 40),
+			new OrePocket(World.AIR ,0.008, 0.59, 0.9, 40),
 			
 			new Surface(),
 			new OrePocket(World.COPPER,0.008, 0.15, 0.41, 20),
 			new OrePocket(World.COPPER,0.008, 0.39, 0.80, 10),
 			new OrePocket(World.STONE, 0.008, 0.00, 0.56, 20),
-			new OrePocket(World.DIRT,  0.008, 0.39, 0.80, 10),
+			
+			new Hell(0.82, 0.98),
 			
 			new CleanScraps(World.AIR),
 			//new SimpleErosion(100) // this is shit. Makes the map way worse.

@@ -86,7 +86,7 @@ public class SimpleLiquid extends Generator{
 		while(px-a>=0 && w.getTerrainAt(px-a,py)==World.AIR){
 			value++;
 			a+=1;
-			if (w.getTerrainAt(px-a,py+1)==World.AIR){
+			if (w.isInRange(px-a, py+1, 0) && w.getTerrainAt(px-a,py+1)==World.AIR){
 				return-1;
 			}
 		}
