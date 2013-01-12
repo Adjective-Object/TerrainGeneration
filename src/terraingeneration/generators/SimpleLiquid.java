@@ -21,50 +21,53 @@ public class SimpleLiquid extends Generator{
 	public void applyToWorld(World w) {
 		for(int y=(int) (w.getHeight()*startDepth); y<w.getHeight()*endDepth; y+= resolution){
 			for(int x=0; x<w.getWidth()-1; x+=resolution){
-				for(int v=0; v<3; v++){
+				for(int v=0; v<1; v++){
 					int px=x;
 					int py=y;
 					
-					while(py<w.getHeight()-1 && w.getTerrainAt(px,py)!=World.AIR){
-						py++;
-					}
-					int trials = 0;
-					while(trials<30 && px>0 && py<w.getHeight()-1 && px< w.getWidth()-2 ){//k
+					int trials = 0, remainingvolume = this.volume;
+					int dir = 1;
+					while(trials<200 && remainingvolume>0 && px>0 && py<w.getHeight()-1 && px< w.getWidth()-2 ){//k
+						//System.out.println(px+" , "+py+" "+w.getTerrainAt(px,py));
 						trials++;
-						if(w.getTerrainAt(px,py+1)==World.AIR){
+						if(w.getTerrainAt(px,py)!=World.AIR){
+							py--;
+						}
+						else if(w.getTerrainAt(px,py+1)==World.AIR){
 							py++;
 							trials=0;
 						}
-						else if(w.getTerrainAt(px+1,py)==World.AIR){
-							px++;
+						else if(w.getTerrainAt(px+dir,py)==World.AIR){
+							px+=dir;
 						}
-						else if(w.getTerrainAt(px-1,py)==World.AIR){
-							px--;
+						else if(w.getTerrainAt(px+dir,py)!=World.AIR){
+							dir=dir*-1;
+							if(w.getTerrainAt(px+dir,py)!=World.AIR){
+								remainingvolume = depositLiquid(w,px,py,remainingvolume);
+							}
 						}
-						else{
-							break;
+						if(trials>50){
+							remainingvolume = depositLiquid(w,px,py,remainingvolume);
 						}
-					}
-					if (px>0 && py<w.getHeight()-1 && px< w.getWidth()-2 ){
-						depositLiquid(w,px,py);
 					}
 				}
 			}
 		}
 	}
 
-	private void depositLiquid(World w, int px, int py) {
+	private int depositLiquid(World w, int px, int py, int level) {
 		int sumValue = 0;
-		while(sumValue<this.volume && w.getTerrainAt(px,py)==World.AIR){
+		while(sumValue<level && w.getTerrainAt(px,py)==World.AIR){
 			int lv = getLayerValue(w,px,py);
 			if(lv==-1){
-				break;
+				return level-sumValue;
 			} else{
 				sumValue+=lv;
 				fillLayer(w,px,py);
 				py--;
 			}
 		}
+		return level-sumValue;
 			
 	}
 

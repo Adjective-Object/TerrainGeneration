@@ -8,27 +8,37 @@ import terraingeneration.World;
 public class CaveSystem extends Generator{
 
 	double rarity, startDepth, endDepth;
-	int resolution;
+	int resolution, carve;
 	int jaggedness, size;
+	Cave cave;
 	
-	public CaveSystem(double rarity, int resolution, int size, double startDepth, double endDepth){
+	public CaveSystem(int carveblock,  double rarity, int resolution, int size, double startDepth, double endDepth){
+		this(carveblock, rarity, resolution, size, startDepth, endDepth, new Cave());
+	}
+	
+	public CaveSystem(int carveblock,  double rarity, int resolution, int size, double startDepth, double endDepth, Cave cave){
 		this.rarity=rarity;
 		this.resolution=resolution;
 		this.jaggedness=1;
 		this.size = size;
 		this.startDepth=startDepth;
 		this.endDepth=endDepth;
+		this.cave=cave;
+		this.carve=carveblock;
 	}
+	
+	
 	
 	@Override
 	public void applyToWorld(World w) {
-
+		CaveNode.carveblock=carve;
 		for(int x=0; x<w.getWidth(); x+=resolution){
-			for(int y=(int) (w.getHeight()*startDepth); y<w.getHeight()*endDepth; y+=resolution){
-				Cave c = new Cave(w, x, y, size);//10 = width of cave to start
-				
-				c.populateCave(w);
-				c.fillCave(w);
+			for(int y=(int) (w.getHeight()*startDepth); y<w.getHeight()*endDepth; y+=resolution){	
+				if(w.getSeed().nextBoolean()){
+					cave.setOrigin( new CaveNode(w, x, y, size));
+					cave.populateCave(w);
+					cave.fillCave(w);
+				}
 			}
 		}
 	}
@@ -39,16 +49,15 @@ class Cave{
 	CaveNode originNode;
 	static final int maxbranches = 2;
 	
-	public Cave(World w, int spawnX, int spawnY, int caveWidth){
-		this.originNode = new CaveNode(spawnX,spawnY,(int)((w.getSeed().nextFloat()/2+0.5)*caveWidth));
-		populateCave(w, originNode);
+	public void setOrigin(CaveNode node){
+		this.originNode = node;
 	}
 	
 	public void populateCave(World w){
 		populateCave(w,originNode);
 	}
 	
-	public static void populateCave(World w, CaveNode node){
+	public void populateCave(World w, CaveNode node){
 		for(int i=0; i<maxbranches; i++){
 			if(node.width>3 || w.getSeed().nextFloat()<=0.1){
 				int si = node.width;
@@ -94,8 +103,7 @@ class Cave{
 					//slope of line perpendicular to the line between the caves
 					drawLine(w,x,y,-(float)(subnode.x-node.x)/(subnode.y-node.y),
 							(int)(node.width-(float)(subnode.x-x)/(subnode.x-node.x)*(subnode.width-node.width))+w.getSeed().nextInt(1)-w.getSeed().nextInt(1)
-							,World.AIR);
-					w.setTerrainAt(x, y, World.AIR);
+							,CaveNode.carveblock);
 					a=y;
 				}
 				if(lasty!=a){
@@ -103,12 +111,12 @@ class Cave{
 				} else{
 					drawLine(w,x,lasty,-(float)(subnode.x-node.x)/(subnode.y-node.y),
 							(int)(node.width+(float)(subnode.x-x)/(subnode.x-node.x)*(subnode.width-node.width))+w.getSeed().nextInt(1)-w.getSeed().nextInt(1)//width of cave at this point
-							,World.AIR);
+							,CaveNode.carveblock);
 				}
 			}
 			if(node.x==node.getChildren().get(i).x){
 				for(int y=node.y; y<subnode.y; y++){
-					w.setTerrainAt(node.x, y, World.AIR);
+					w.setTerrainAt(node.x, y, CaveNode.carveblock);
 				}
 			}
 		}
@@ -165,24 +173,26 @@ class CaveNode{
 	int x,y,width;
 	CaveNode parentNode;
 	
-	ArrayList<CaveNode> children;
+	static int carveblock;
+	
+	ArrayList<CaveNode> children = new ArrayList<CaveNode>(0);
 
 	static final int resolution = 20;
 	static final int cutoffbig = 5;
 	
-	public CaveNode(int x, int y, int width){
+	public CaveNode(World w, int x, int y, int width){
 		this.x=x;
 		this.y=y;
 		this.width=width;
 		this.parentNode=null;
-		this.children = new ArrayList<CaveNode>(0);
+		limitToWorld(w);
 	}
 	
-	public CaveNode(CaveNode parentNode, int x, int y,  ArrayList<CaveNode> children){
-		this.children=children;
+	public CaveNode(World w, CaveNode parentNode, int x, int y, int width){
 		this.x=x;
 		this.y=y;
-		this.parentNode=parentNode;
+		this.width=width;
+		limitToWorld(w);
 	}
 	
 	public CaveNode(World w,CaveNode parentNode, int width){

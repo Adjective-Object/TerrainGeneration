@@ -15,7 +15,9 @@ public class World {
 			COPPER=4,
 			IRON=5,
 			WATER=6,
-			LAVA=7;
+			LAVA=7,
+			ASH=8,
+			HELLROCK=9;
 	
 	int seedCalls = 0;
 	
@@ -24,36 +26,54 @@ public class World {
 	
 	static final Generator[] generators = new Generator[]{
 			//shitty, but it provides seed areas for the air orepockets
-			new CaveSystem(0.93,30,5,0.3,0.9),
+			new CaveSystem(World.AIR,0.93,30,5,0.3,0.9),
+			new CaveSystem(World.AIR,0.93,30,8,0.1,0.11, new ShallowCave()),
 
-			new OrePocket(World.AIR ,0.008, 0.3, 0.41, 25),
-			new OrePocket(World.AIR ,0.008, 0.39, 0.61, 30),
+
 			new OrePocket(World.AIR ,0.008, 0.59, 0.9, 40),
+			new OrePocket(World.AIR ,0.008, 0.3, 0.6, 10),
+			
+			new ScuffSurfaces(World.AIR, World.DIRT,0.04, 0.0, 1.0, 20),
+
+
 			
 			new Surface(),
 			new OrePocket(World.COPPER,0.008, 0.15, 0.41, 20),
 			new OrePocket(World.COPPER,0.008, 0.39, 0.80, 10),
 			new OrePocket(World.STONE, 0.008, 0.00, 0.56, 20),
-			
-			new Hell(0.82, 0.98),
-			
+						
 			new CleanScraps(World.AIR),
 			//new SimpleErosion(100) // this is shit. Makes the map way worse.
-			new SimpleLiquid(World.LAVA, 0.65, 1.0, 10, 50),
-			new SimpleLiquid(World.WATER, 0.1, 1.0, 30, 30),
-			new Grasser(World.GRASS, 0.2, 0.4, 8)
+			new SimpleLiquid(World.LAVA, 0.75, 1.0, 20, 15),
+			new SimpleLiquid(World.WATER, 0.1, 1.0, 28, 20),
+			
+			new HellFrame(0.82, 1.00),
+			new CaveSystem(World.ASH,0.93,30,15,0.87,1.0, new ShallowCave()),
+			new OrePocket(World.HELLROCK,0.008, 0.8, 1, 50),
+
+			
+			new SimpleLiquid(World.LAVA, 0.9, 1.0, 20, 70),
+			
+			new ScuffSurfaces(World.ASH, World.LAVA ,0.04, 0.82, 1.0, 20),
+			new ScuffSurfaces(World.ASH, World.AIR ,0.1, 0.82, 1.0, 40),
+			new CleanScraps(World.ASH),
+
+
+
+			new Grasser(World.GRASS, 0.2, 0.4, 4)
 	};
 	
 	static final BlockAttribute[][] attributes = new BlockAttribute[][]{
-		new BlockAttribute[0],
-		new BlockAttribute[0],
-		new BlockAttribute[] {new PropogatesAlongSurface(World.GRASS, World.DIRT, 0.4)},
-		new BlockAttribute[0],
-		new BlockAttribute[0],
-		new BlockAttribute[0],
-		new BlockAttribute[0],
-		new BlockAttribute[0],
-		new BlockAttribute[0],
+		new BlockAttribute[0],//air
+		new BlockAttribute[0],//dirt
+		new BlockAttribute[] {new PropogatesAlongSurface(World.GRASS, World.DIRT, 0.4)},//grass
+		new BlockAttribute[0],//stone
+		new BlockAttribute[0],//copper
+		new BlockAttribute[0],//iron
+		new BlockAttribute[0],//water
+		new BlockAttribute[0],//lava
+		new BlockAttribute[0],//ash
+		new BlockAttribute[0],//hellrock
 	};
 	
 	public World(int width, int height, int seed){
