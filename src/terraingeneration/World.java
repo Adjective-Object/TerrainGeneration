@@ -42,24 +42,22 @@ public class World {
 			new OrePocket(World.COPPER,0.008, 0.39, 0.80, 10),
 			new OrePocket(World.STONE, 0.008, 0.00, 0.56, 20),
 						
-			new CleanScraps(World.AIR),
-			//new SimpleErosion(100) // this is shit. Makes the map way worse.
 			new SimpleLiquid(World.LAVA, 0.75, 1.0, 20, 15),
 			new SimpleLiquid(World.WATER, 0.1, 1.0, 28, 20),
 			
+			//hell
 			new HellFrame(0.82, 1.00),
 			new CaveSystem(World.ASH,0.93,30,15,0.87,1.0, new ShallowCave()),
-			new OrePocket(World.HELLROCK,0.008, 0.8, 1, 50),
+						
+			new ScuffSurfaces(World.ASH, World.AIR ,0.05, 0.82, 1.0, 20),
+			
+			new OrePocket(World.HELLROCK,0.008, 0.85, 1, 50),
+			new FillArea(World.LAVA, World.AIR, 0.92, 1.0),
+			new SimpleLiquid(World.LAVA, 0.9, 1.0, 20, 30),
 
 			
-			new SimpleLiquid(World.LAVA, 0.9, 1.0, 20, 70),
-			
-			new ScuffSurfaces(World.ASH, World.LAVA ,0.04, 0.82, 1.0, 20),
-			new ScuffSurfaces(World.ASH, World.AIR ,0.1, 0.82, 1.0, 40),
 			new CleanScraps(World.ASH),
-
-
-
+			new CleanScraps(World.AIR),
 			new Grasser(World.GRASS, 0.2, 0.4, 4)
 	};
 	

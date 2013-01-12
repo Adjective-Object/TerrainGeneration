@@ -19,18 +19,18 @@ public class OrePocket extends Generator{
 		int range = (int) ((upperBound-lowerBound)*w.getHeight());
 		for(int x=0; x<w.getWidth(); x++){
 			for(int y=0; y<w.getHeight(); y++){
-				if(y<upperBound*w.getHeight() && y>lowerBound*w.getHeight()){
+				if(y<upperBound*w.getHeight() && y>lowerBound*w.getHeight() && w.getTerrainAt(x,y)!=World.AIR){
 					if(w.getSeed().nextFloat()<=
 						rarity * Math.sqrt(1 - Math.pow( (2.0/range)*(y-(lowerBound*w.getHeight())-range/2),2) )
 						){
-						makeOreVein(w,x,y,(int)(veinSize),veinSize,blockID);
+						makeOreVein(w,x,y,(int)(veinSize),veinSize,blockID,false);
 					}
 				}
 			}
 		}
 	}
 	
-	public static void makeOreVein(World w, int x, int y, int veinSize, int failcap, int blockID){
+	public static void makeOreVein(World w, int x, int y, int veinSize, int failcap, int blockID, boolean writesAir){
 		int timetofail = 0;
 		int xo = 0, yo = 0;
 		for(int i=0; i<veinSize; i++){
@@ -49,7 +49,7 @@ public class OrePocket extends Generator{
 				timetofail++;
 			}
 			timetofail=0;
-			if(w.getTerrainAt(x+xo, y+yo)!=World.AIR){
+			if(writesAir || w.getTerrainAt(x+xo, y+yo)!=World.AIR){
 				w.setTerrainAt(x+xo,y+yo,blockID);
 			}	
 		}

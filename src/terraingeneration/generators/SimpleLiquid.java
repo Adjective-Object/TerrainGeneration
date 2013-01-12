@@ -43,11 +43,11 @@ public class SimpleLiquid extends Generator{
 						else if(w.getTerrainAt(px+dir,py)!=World.AIR){
 							dir=dir*-1;
 							if(w.getTerrainAt(px+dir,py)!=World.AIR){
-								remainingvolume = depositLiquid(w,px,py,remainingvolume);
+								remainingvolume = depositLiquid(w,this.liquidID, px,py,remainingvolume);
 							}
 						}
 						if(trials>50){
-							remainingvolume = depositLiquid(w,px,py,remainingvolume);
+							remainingvolume = depositLiquid(w,this.liquidID,px,py,remainingvolume);
 						}
 					}
 				}
@@ -55,7 +55,7 @@ public class SimpleLiquid extends Generator{
 		}
 	}
 
-	private int depositLiquid(World w, int px, int py, int level) {
+	protected int depositLiquid(World w, int liquid, int px, int py, int level) {
 		int sumValue = 0;
 		while(sumValue<level && w.getTerrainAt(px,py)==World.AIR){
 			int lv = getLayerValue(w,px,py);
@@ -63,7 +63,7 @@ public class SimpleLiquid extends Generator{
 				return level-sumValue;
 			} else{
 				sumValue+=lv;
-				fillLayer(w,px,py);
+				fillLayer(w,liquid,px,py);
 				py--;
 			}
 		}
@@ -71,15 +71,15 @@ public class SimpleLiquid extends Generator{
 			
 	}
 
-	private void fillLayer(World w, int px, int py) {
+	private void fillLayer(World w, int liquid, int px, int py) {
 		int a=1, b=1;
-		w.setTerrainAt(px, py, this.liquidID);
+		w.setTerrainAt(px, py, liquid);
 		while(px-a>=0 && w.getTerrainAt(px-a,py)==World.AIR){
-			w.setTerrainAt(px-a, py, this.liquidID);
+			w.setTerrainAt(px-a, py, liquid);
 			a++;
 		}
 		while(px+b<w.getWidth()-1 && w.getTerrainAt(px+b,py)==World.AIR){
-			w.setTerrainAt(px+b, py, this.liquidID);
+			w.setTerrainAt(px+b, py, liquid);
 			b++;
 		}
 	}
