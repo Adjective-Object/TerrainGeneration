@@ -6,7 +6,7 @@ public class Surface extends Generator{
 	
 	static final int stoneTransition = 10;
 	static final int drunkwalk = 10;
-	static final float dirtLayer = 0.3F;
+	static final float dirtLayer = 0.3F, maxheight=0.1F;
 	
 	
 	public Surface(){}
@@ -24,6 +24,9 @@ public class Surface extends Generator{
 		
 		for(int x=0; x<w.getTerrain().length; x++){
 			int surfLevel = (int) (surfacepoints[x/10] + (surfacepoints[x/10+1]-surfacepoints[x/10]) * (x%10/10.0F) );
+			if(surfLevel<=maxheight*w.getHeight()){
+				surfLevel=(int) (maxheight*w.getHeight()+(maxheight*w.getHeight()-surfLevel));
+			}
 			for(int y=0; y<w.getTerrain()[0].length; y++){
 				if(y>surfLevel && w.getTerrainAt(x,y)!=World.AIR){
 					if(w.getSeed().nextFloat() >= (y-surfLevel-w.getHeight()*dirtLayer)*1.0/stoneTransition ){

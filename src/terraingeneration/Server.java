@@ -16,7 +16,7 @@ public class Server {
 	
 	
 	public static void main(String[] args){
-		World g = new World (1000,1000,13);
+		World g = new World (1200,600,(int)(System.currentTimeMillis()/1000));
 		
 		JFrame frame = new JFrame("Generated Terrain");
 		frame.setPreferredSize(new Dimension(800,600));

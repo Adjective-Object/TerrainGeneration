@@ -23,7 +23,9 @@ public class WorldViewer {
 		new Color(180,30,30),	//hellstone
 		new Color(72,61,139),	//mithril
 		new Color(10,10,10),	//obsidian
-		new Color(250,250,210)	//sand
+		new Color(250,250,210),	//sand
+		new Color(250,250,210),	//wood
+		new Color(240,205,130)	//torches
 	};
 	
 	public static BufferedImage drawTerrain(World g) {

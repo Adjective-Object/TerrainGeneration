@@ -1,31 +1,17 @@
-package terraingeneration.generators;
+package terraingeneration.biome;
 
 import terraingeneration.World;
 
-public class Desert extends Generator{
+public class Desert extends Biome{
 	
 	static final int depth = 50, wander= 3, maxwidth=200;
 	
 	double chance;
-	int blockID;
 	
-	public Desert(int blockID, double chance){
-		this.chance=chance;
-		this.blockID=blockID;
-	}
+	public Desert(){}
 	
-	@Override
-	public void applyToWorld(World w) {
-		int pre=-1, nex=-1;
-		for (int i=0; i<w.getWidth(); i++){
-			if(w.getSeed().nextDouble()<=chance || (pre!=-1 && i-pre>maxwidth) ){
-				nex = i;
-			}
-			if(pre!=nex && pre!=-1){
-				makeDesert(w,pre,nex);
-			}
-			pre = nex;
-		}
+	public void applyToWorld(World w, int leftBoundary, int rightBoundary){
+		makeDesert(w,leftBoundary,rightBoundary-1);
 	}
 	
 	private void makeDesert(World w, int left, int right){
@@ -62,10 +48,22 @@ public class Desert extends Generator{
 	}
 	
 	private void fillColumn(World w, int x, int y){
-		while(y!=0 && w.getTerrainAt(x, y)!=World.AIR){
-			w.setTerrainAt(x, y, blockID);
-			y--;
+		int ty = y;
+		boolean hitsurface=false;
+		while(ty<y){
+			if(w.getTerrainAt(x, y) != World.AIR){
+				hitsurface=true;
+			}
+			if(hitsurface){
+				w.setTerrainAt(x, y, World.SAND);
+			}
+			ty++;
 		}
+	}
+	
+	@Override
+	public boolean isFound(int distanceOut) {
+		return distanceOut>800;
 	}
 
 }
