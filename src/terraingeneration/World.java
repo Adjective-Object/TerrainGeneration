@@ -1,8 +1,7 @@
 package terraingeneration;
 import java.util.Random;
 
-import terraingeneration.blockattributes.BlockAttribute;
-import terraingeneration.blockattributes.PropogatesAlongSurface;
+import terraingeneration.blockattributes.*;
 import terraingeneration.generators.*;
 
 
@@ -17,7 +16,14 @@ public class World {
 			WATER=6,
 			LAVA=7,
 			ASH=8,
-			HELLROCK=9;
+			HELLROCK=9,
+			MITHRIL=10,
+			OBSIDIAN=11,
+			SAND=12;
+	
+	public static final int[]
+	        mess = {DIRT, STONE},
+	        liquids = {LAVA, WATER};
 	
 	int seedCalls = 0;
 	
@@ -25,39 +31,49 @@ public class World {
 	private Random seed;
 	
 	static final Generator[] generators = new Generator[]{
-			//shitty, but it provides seed areas for the air orepockets
-			new CaveSystem(World.AIR,0.93,30,5,0.3,0.9),
+			//basic background fill
+			new Surface(),
+			
+			//surface features
+			new Desert(World.SAND, 0.004),
+			
+			//creates the caves
+			new CaveSystem(World.AIR,0.93,30,5,0.3,0.9),//default is kinda shit.
 			new CaveSystem(World.AIR,0.93,30,8,0.1,0.11, new ShallowCave()),
 
-
-			new OrePocket(World.AIR ,0.008, 0.59, 0.9, 40),
-			new OrePocket(World.AIR ,0.008, 0.3, 0.6, 10),
+			new OrePocket(World.AIR , mess, 0.008, 0.59, 0.9, 20),
+			new OrePocket(World.AIR , mess,0.008, 0.3, 0.6, 10),
 			
 			new ScuffSurfaces(World.AIR, World.DIRT,0.04, 0.0, 1.0, 20),
-
-
+			new ScuffSurfaces(World.AIR, World.STONE,0.04, 0.0, 1.0, 20),
 			
-			new Surface(),
-			new OrePocket(World.COPPER,0.008, 0.15, 0.41, 20),
-			new OrePocket(World.COPPER,0.008, 0.39, 0.80, 10),
-			new OrePocket(World.STONE, 0.008, 0.00, 0.56, 20),
-						
+			//places minerals
+			new OrePocket(World.STONE, mess, 0.008, 0.00, 0.56, 20),
+			new OrePocket(World.DIRT, mess, 0.008, 0.46, 0.90, 20),
+			new OrePocket(World.COPPER, mess, 0.008, 0.15, 0.41, 20),
+			new OrePocket(World.IRON, mess, 0.006, 0.39, 0.80, 10),
+			new OrePocket(World.MITHRIL, mess, 0.001, 0.59, 0.90, 50),
+			
+			//lays liquids
 			new SimpleLiquid(World.LAVA, 0.75, 1.0, 20, 15),
 			new SimpleLiquid(World.WATER, 0.1, 1.0, 28, 20),
 			
-			//hell
+			//making hell
 			new HellFrame(0.82, 1.00),
 			new CaveSystem(World.ASH,0.93,30,15,0.87,1.0, new ShallowCave()),
 						
-			new ScuffSurfaces(World.ASH, World.AIR ,0.05, 0.82, 1.0, 20),
+			new ScuffSurfaces(World.ASH, World.AIR ,0.3, 0.82, 1.0, 5),
 			
-			new OrePocket(World.HELLROCK,0.008, 0.85, 1, 50),
+			new OrePocket(World.HELLROCK, new int[] {World.ASH}, 0.008, 0.85, 1, 50),
 			new FillArea(World.LAVA, World.AIR, 0.92, 1.0),
 			new SimpleLiquid(World.LAVA, 0.9, 1.0, 20, 30),
-
 			
+			new ScuffSurfaces(World.ASH, World.LAVA ,0.1, 0.82, 1.0, 20),
+
 			new CleanScraps(World.ASH),
 			new CleanScraps(World.AIR),
+			
+			//placing grass
 			new Grasser(World.GRASS, 0.2, 0.4, 4)
 	};
 	
@@ -68,10 +84,13 @@ public class World {
 		new BlockAttribute[0],//stone
 		new BlockAttribute[0],//copper
 		new BlockAttribute[0],//iron
-		new BlockAttribute[0],//water
-		new BlockAttribute[0],//lava
+		new BlockAttribute[] {new LiquidSettle()},//water
+		new BlockAttribute[] {new TransformOnContact(World.OBSIDIAN,World.WATER)},//lava
 		new BlockAttribute[0],//ash
 		new BlockAttribute[0],//hellrock
+		new BlockAttribute[0],//mihril
+		new BlockAttribute[0],//obsidian
+		new BlockAttribute[] {new FallingBlock()},//sand
 	};
 	
 	public World(int width, int height, int seed){
@@ -150,7 +169,7 @@ public class World {
 				p=1;
 			}
 			for (int b=-p; b<=p; b++){
-				if(this.getTerrainAt(x+a,y+b)==blockValue){
+				if(isInRange(x+a,y+b,0) && this.getTerrainAt(x+a,y+b)==blockValue){
 					return true;
 				}
 			}
