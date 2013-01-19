@@ -28,7 +28,7 @@ public class World {
 	        mess = {DIRT, STONE},
 	        liquids = {LAVA, WATER};
 	
-	public static final int biomeWidth = 200;
+	public static final int biomeWidth = 80;
 	
 	int seedCalls = 0;
 	private int[][] terrain;
@@ -88,6 +88,7 @@ public class World {
 					new ScuffSurfaces(World.ASH, World.LAVA ,0.1, 0.82, 1.0, 20),
 					
 					new CleanScraps(World.ASH),
+					new CleanScraps(World.AIR),
 				});
 	static final Biome[] ancillaryBiomes = new Biome[]{
 		new Spawn(),
@@ -100,7 +101,6 @@ public class World {
 					new ScuffSurfaces(World.AIR, World.DIRT,0.04, 0.0, 1.0, 20),
 					new ScuffSurfaces(World.AIR, World.STONE,0.04, 0.0, 1.0, 20),
 					
-					new CleanScraps(World.AIR),
 					//placing grass
 					new Grasser(World.GRASS, 0.2, 0.4, 4)
 
@@ -109,6 +109,7 @@ public class World {
 	public World(int width, int height, int seed){
 		setTerrain(new int[width][height]);
 		this.seed = new Random(seed);
+		
 		
 		for(int i=0; i<width; i++){
 			for(int p=0; p<height; p++){

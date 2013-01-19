@@ -38,7 +38,7 @@ public class Spawn extends Biome{
 		
 		
 		int O=World.AIR;
-		int W=World.DIRT;//TODO wood
+		int W=World.WOOD;//TODO wood
 		int S=World.STONE;
 		int D=World.DIRT;
 		int I=-1;

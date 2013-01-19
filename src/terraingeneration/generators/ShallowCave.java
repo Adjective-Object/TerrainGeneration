@@ -7,11 +7,11 @@ public class ShallowCave extends Cave{
 	
 	static final int descent = 10, xwander=40;
 	
-	public void populateCave(World w, CaveNode node){
-		
-		int wid = node.width;
-		if (w.getSeed().nextFloat()<=0.2){
-			wid--;
+		public void populateCave(World w, CaveNode node){
+			
+			int wid = node.width;
+			if (w.getSeed().nextFloat()<=0.2){
+				wid--;
 		}
 		
 		if(node.width>1){
